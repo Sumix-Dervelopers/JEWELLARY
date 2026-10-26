@@ -1,0 +1,491 @@
+@import "tailwindcss";
+
+/* ============================================================
+   SUMIX JEWELS — design tokens
+   ============================================================ */
+@theme {
+  /* Palette */
+  --color-obsidian: #10100f;
+  --color-ink: #080808;
+  --color-ivory: #f7f3eb;
+  --color-parchment: #efe9df; /* product image ground, quiet panels */
+  --color-stone: #ddd5c7;
+  --color-champagne: #c6a66b;
+  --color-antique: #9c7b45;
+  --color-taupe: #6e655a; /* secondary text on ivory, 5.1:1 */
+  --color-mist: #a39a8c; /* secondary text on obsidian, 6.8:1 */
+  --color-line: rgb(16 16 15 / 0.14);
+  --color-line-strong: rgb(16 16 15 / 0.32);
+  --color-line-dark: rgb(247 243 235 / 0.16);
+  --color-error: #9b2c1f;
+
+  /* Type */
+  --font-display: var(--font-bodoni), "Bodoni 72", "Didot", Georgia, serif;
+  --font-sans: var(--font-manrope), "Helvetica Neue", Arial, system-ui, sans-serif;
+
+  --text-micro: 0.75rem;
+  --text-micro--line-height: 1.4;
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.5;
+
+  /* Tracking is size-specific: tighter as type grows, slightly open when small */
+  --tracking-label: 0.16em;
+  --tracking-display: -0.012em;
+
+  /* Motion — strong curves from the animate skill; never ease-in on UI */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --animate-page-in: page-in 320ms var(--ease-out) both;
+
+  /* Layout */
+  --breakpoint-xs: 26rem;
+}
+
+:root {
+  --header-h: 4rem;
+  --gutter: 1.25rem;
+  --dur-press: 140ms;
+  --dur-ui: 220ms;
+  --dur-drawer: 420ms;
+  --dur-reveal: 700ms;
+  color-scheme: light;
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --gutter: 2.5rem;
+  }
+}
+@media (min-width: 80rem) {
+  :root {
+    --header-h: 4.5rem;
+    --gutter: 3.5rem;
+  }
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: calc(var(--header-h) + 1rem);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background: var(--color-ivory);
+    color: var(--color-obsidian);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    font-weight: 400;
+    letter-spacing: 0;
+    font-kerning: normal;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: var(--tracking-display);
+    line-height: 1.08;
+    font-optical-sizing: auto;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-champagne);
+    color: var(--color-ink);
+  }
+
+  /* Visible, consistent keyboard focus */
+  :focus-visible {
+    outline: 1.5px solid var(--color-antique);
+    outline-offset: 3px;
+  }
+  .on-dark :focus-visible,
+  .on-dark:focus-visible {
+    outline-color: var(--color-champagne);
+  }
+
+  button,
+  a,
+  [role="button"] {
+    touch-action: manipulation;
+  }
+  button,
+  [role="button"],
+  label {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* 16px minimum stops iOS zooming into inputs */
+  input,
+  textarea,
+  select {
+    font-size: max(16px, 1rem);
+  }
+
+  button:not(:disabled),
+  [role="button"],
+  summary {
+    cursor: pointer;
+  }
+
+  /* The native clear control clashes with the palette; Escape and backspace clear instead */
+  input[type="search"]::-webkit-search-cancel-button,
+  input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+}
+
+/* ============================================================
+   Typographic primitives
+   ============================================================ */
+@layer components {
+  .wrap {
+    width: 100%;
+    max-width: 90rem;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  /* Display scale. Bodoni Moda's optical-size axis sharpens hairlines as it grows;
+     leading and tracking tighten with size, never one value for every step. */
+  .display-xl {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 1.5rem + 6vw, 7.5rem);
+    line-height: 0.94;
+    letter-spacing: -0.028em;
+  }
+  .display-lg {
+    font-family: var(--font-display);
+    font-size: clamp(2.375rem, 1.45rem + 3.7vw, 4.875rem);
+    line-height: 1;
+    letter-spacing: -0.022em;
+  }
+  .display-md {
+    font-family: var(--font-display);
+    font-size: clamp(1.875rem, 1.35rem + 2.1vw, 3.25rem);
+    line-height: 1.06;
+    letter-spacing: -0.016em;
+  }
+  .display-sm {
+    font-family: var(--font-display);
+    font-size: clamp(1.375rem, 1.18rem + 0.8vw, 1.875rem);
+    line-height: 1.18;
+    letter-spacing: -0.008em;
+  }
+
+  /* The one tracked label, used sparingly (hero eyebrow, footer headings) */
+  .label {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    line-height: 1.4;
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .lede {
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+    line-height: 1.7;
+    letter-spacing: -0.003em;
+  }
+
+  /* Text link with a hairline that draws in on hover */
+  .link-line {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size var(--dur-ui) var(--ease-out);
+    padding-bottom: 1px;
+  }
+  .link-line[aria-current="page"],
+  .link-line.is-active,
+  .link-line[data-active],
+  [data-popup-open] > .link-line {
+    background-size: 100% 1px;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .link-line:hover {
+      background-size: 100% 1px;
+    }
+  }
+
+  /* Press feedback for every pressable surface */
+  .pressable {
+    transition: transform var(--dur-press) var(--ease-out);
+  }
+  .pressable:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+}
+
+/* ============================================================
+   Motion
+   ============================================================ */
+
+/* Bag and wishlist counters confirm an add */
+@keyframes count-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+/* Route content fades in; opacity only so it never fights scroll restoration */
+@keyframes page-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Scroll reveal — fires once, marketing surfaces only */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity var(--dur-reveal) var(--ease-out),
+    transform var(--dur-reveal) var(--ease-out);
+  transition-delay: calc(var(--stagger, 0) * 70ms);
+}
+.reveal[data-visible="true"] {
+  opacity: 1;
+  transform: none;
+}
+/* Curtain reveal: an overlay retracts upward. The image itself is never clipped, so the
+   browser's lazy loader still sees it, and the motion is a compositor-only transform. */
+.reveal-mask {
+  position: relative;
+}
+.reveal-mask::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: var(--mask-color, var(--color-ivory));
+  transform-origin: top;
+  transition: transform 1100ms var(--ease-in-out);
+}
+.reveal-mask[data-visible="true"]::after {
+  transform: scaleY(0);
+}
+.on-dark .reveal-mask {
+  --mask-color: var(--color-obsidian);
+}
+/* Without JavaScript, content must never stay hidden */
+.no-js .reveal {
+  opacity: 1;
+  transform: none;
+}
+.no-js .reveal-mask::after {
+  display: none;
+}
+
+/* Image zoom inside a clipped frame (cards, tiles) */
+.zoom-frame {
+  overflow: hidden;
+}
+.zoom-frame img {
+  transition: transform 900ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .zoom-frame img,
+  .zoom-frame:hover img {
+    transform: scale(1.04);
+  }
+}
+
+/* Hairline arrow that extends on hover — replaces "→" glyphs */
+.hairline-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+}
+.hairline-arrow .shaft {
+  width: 1.75rem;
+  height: 1px;
+  background: currentColor;
+  transform-origin: left;
+  transition: transform var(--dur-ui) var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .hairline-arrow .shaft,
+  .hairline-arrow:hover .shaft {
+    transform: scaleX(1.45);
+  }
+  .group:hover .hairline-arrow .head,
+  .hairline-arrow:hover .head {
+    transform: translateX(0.79rem);
+  }
+}
+.hairline-arrow .head {
+  transition: transform var(--dur-ui) var(--ease-out);
+  margin-left: -0.45rem;
+}
+
+/* ============================================================
+   Overlays (Base UI Drawer / Dialog / NavigationMenu)
+   ============================================================ */
+.overlay-backdrop {
+  position: fixed;
+  inset: 0;
+  min-height: 100dvh;
+  background: rgb(8 8 8 / 0.5);
+  opacity: calc(1 - var(--drawer-swipe-progress, 0));
+  transition: opacity var(--dur-drawer) var(--ease-drawer);
+}
+.overlay-backdrop[data-starting-style],
+.overlay-backdrop[data-ending-style] {
+  opacity: 0;
+}
+
+.drawer-panel {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(28rem, 100vw);
+  height: 100dvh;
+  outline: none;
+  overscroll-behavior: contain;
+  transform: translateX(var(--drawer-swipe-movement-x, 0px));
+  transition: transform var(--dur-drawer) var(--ease-drawer);
+}
+.drawer-panel[data-swiping] {
+  transition-duration: 0ms;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.drawer-panel[data-ending-style] {
+  transition-duration: calc(var(--drawer-swipe-strength, 1) * 380ms);
+}
+.drawer-panel--right {
+  right: 0;
+}
+.drawer-panel--right[data-starting-style],
+.drawer-panel--right[data-ending-style] {
+  transform: translateX(100%);
+}
+.drawer-panel--left {
+  left: 0;
+}
+.drawer-panel--left[data-starting-style],
+.drawer-panel--left[data-ending-style] {
+  transform: translateX(-100%);
+}
+
+/* Search sheet drops from the top edge */
+.sheet-top {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  outline: none;
+  transition:
+    transform 320ms var(--ease-drawer),
+    opacity 320ms var(--ease-out);
+}
+.sheet-top[data-starting-style],
+.sheet-top[data-ending-style] {
+  transform: translateY(-1.5rem);
+  opacity: 0;
+}
+
+/* Lightbox — a modal, so it stays centred */
+.lightbox {
+  transition:
+    opacity 260ms var(--ease-out),
+    transform 260ms var(--ease-out);
+}
+.lightbox[data-starting-style],
+.lightbox[data-ending-style] {
+  opacity: 0;
+  transform: scale(0.97);
+}
+
+/* Mega menu */
+.mega-popup {
+  transition:
+    opacity 240ms var(--ease-out),
+    transform 240ms var(--ease-out);
+}
+.mega-popup[data-starting-style],
+.mega-popup[data-ending-style] {
+  opacity: 0;
+  transform: translateY(-0.5rem);
+}
+.mega-popup[data-ending-style] {
+  transition-duration: 150ms;
+}
+
+/* Reduced motion: keep fades that aid comprehension, remove movement */
+@media (prefers-reduced-motion: reduce) {
+  .drawer-panel,
+  .sheet-top,
+  .lightbox,
+  .mega-popup {
+    transition-property: opacity;
+  }
+  .drawer-panel--right[data-starting-style],
+  .drawer-panel--right[data-ending-style],
+  .drawer-panel--left[data-starting-style],
+  .drawer-panel--left[data-ending-style],
+  .sheet-top[data-starting-style],
+  .sheet-top[data-ending-style],
+  .lightbox[data-starting-style],
+  .lightbox[data-ending-style],
+  .mega-popup[data-starting-style],
+  .mega-popup[data-ending-style] {
+    transform: none;
+    opacity: 0;
+  }
+}
+
+/* Announcement bar dismissal is applied before paint to avoid layout shift */
+html[data-announce="off"] .announcement {
+  display: none;
+}
+
+/* Reduced motion: keep fades that aid comprehension, remove movement */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transform: none;
+    transition-property: opacity;
+  }
+  .reveal-mask::after {
+    transform: none;
+    transition: opacity 400ms ease;
+  }
+  .reveal-mask[data-visible="true"]::after {
+    transform: none;
+    opacity: 0;
+  }
+  .zoom-frame img {
+    transition: none;
+  }
+  .group:hover .zoom-frame img,
+  .zoom-frame:hover img {
+    transform: none;
+  }
+  :root {
+    --animate-page-in: none;
+  }
+}

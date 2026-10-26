@@ -1,0 +1,392 @@
+/* ============================================================
+   HERO — cinematic motion
+   ------------------------------------------------------------
+   Entrance and ambient effects are CSS keyframes: they start on
+   first paint, before hydration, and run off the main thread.
+   Motion (HeroMotion.tsx) adds scroll and pointer depth on
+   separate wrapper layers, and HeroParticles draws the gold dust.
+
+   Entrance (seconds, every page load)
+     0.10–1.75  the photograph opens from a thin letterbox slit to full frame
+     0.10–0.90  …while fading up from black
+     0.10–3.60  …and settling from a 1.22 zoom
+     0.90–1.70  gold hairline draws; eyebrow tracking closes in
+     1.05–2.35  headline rises word by word through masks
+     1.75–2.75  subtitle, then each call to action in turn
+     2.10–3.00  caption band draws along the foot of the frame
+     2.30–3.90  gold dust fades in
+
+   Ambient (loops, paused when the hero is off screen)
+     breathe    an 18 s push-in and back, so the frame is never frozen
+     key light  a warm light drifts across the model over 14 s
+     sheen      a band of light crosses the photograph every 9 s
+     glints     star glints flare on the pendant and earring stones
+     dust       particles drift upward with depth (canvas)
+   ============================================================ */
+
+.hero {
+  --hero-ease: cubic-bezier(0.22, 1, 0.36, 1); /* ease-out-quint: long, quiet settle */
+  --hero-curtain: cubic-bezier(0.83, 0, 0.17, 1); /* in-out-quint: deliberate on-screen movement */
+  --hero-size: clamp(3.25rem, 1.55rem + 6.4vw, 7.75rem);
+  /* The second headline line, the subtitle and the actions share one indent */
+  --hero-indent: 0px;
+  height: calc(100svh - 2.25rem);
+}
+html[data-announce="off"] .hero {
+  height: 100svh;
+}
+
+/* Ambient loops stop when the hero is scrolled away or the tab is hidden */
+.hero[data-paused] .hero-ambient,
+.hero[data-paused] .hero-ambient::before,
+.hero[data-paused] .hero-ambient::after {
+  animation-play-state: paused;
+}
+
+/* ---------- Photograph ---------- */
+
+.hero-parallax {
+  position: absolute;
+  inset: -2.5%; /* bleed so pointer drift never exposes an edge */
+  will-change: transform;
+}
+
+/* Entrance: letterbox slit opening, fade and settling zoom */
+.hero-media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  clip-path: inset(0 0 0 0);
+  animation:
+    hero-mask 1650ms var(--hero-curtain) 100ms both,
+    hero-fade-up-black 800ms ease-out 100ms both;
+}
+@keyframes hero-mask {
+  from {
+    clip-path: inset(47% 0 47% 0);
+  }
+}
+@keyframes hero-fade-up-black {
+  from {
+    opacity: 0;
+  }
+}
+
+.hero-zoom {
+  position: absolute;
+  inset: 0;
+  transform-origin: 64% 42%;
+  animation: hero-zoom 3500ms var(--hero-ease) 100ms both;
+}
+@keyframes hero-zoom {
+  from {
+    transform: scale(1.22);
+  }
+}
+
+/* Ambient breathe: a slow push-in and back that keeps the photograph alive */
+.hero-breathe {
+  position: absolute;
+  inset: 0;
+  transform-origin: 66% 46%;
+  animation: hero-breathe 18s ease-in-out 3.6s infinite alternate both;
+}
+@keyframes hero-breathe {
+  to {
+    transform: scale(1.055);
+  }
+}
+
+/* A warm key light drifting across the model, like a lamp being moved on set */
+.hero-keylight {
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  background: radial-gradient(
+    38% 34% at 68% 40%,
+    rgb(255 226 170 / 0.5) 0%,
+    rgb(255 210 150 / 0.18) 45%,
+    transparent 72%
+  );
+  mix-blend-mode: soft-light;
+  animation:
+    hero-fade 2000ms ease-out 1400ms both,
+    hero-keylight 14s ease-in-out 1400ms infinite alternate;
+}
+@keyframes hero-keylight {
+  0% {
+    transform: translate3d(-6%, -3%, 0);
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(5%, 4%, 0);
+    opacity: 0.75;
+  }
+}
+
+/* A band of light crossing the photograph, every 9 s, first after the entrance */
+.hero-sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.hero-sheen::before {
+  content: "";
+  position: absolute;
+  inset: -10% -40%;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgb(255 236 200 / 0.1) 46%,
+    rgb(255 246 226 / 0.34) 50%,
+    rgb(255 236 200 / 0.1) 54%,
+    transparent 60%
+  );
+  mix-blend-mode: soft-light;
+  transform: translate3d(-75%, 0, 0);
+  animation: hero-sheen 9s var(--hero-curtain) 2.4s infinite both;
+}
+@keyframes hero-sheen {
+  0% {
+    transform: translate3d(-75%, 0, 0);
+    opacity: 0;
+  }
+  4% {
+    opacity: 1;
+  }
+  26% {
+    opacity: 1;
+  }
+  30%,
+  100% {
+    transform: translate3d(75%, 0, 0);
+    opacity: 0;
+  }
+}
+
+/* Star glints on the stones. HeroSparkles positions them over the real pendant and earring */
+.hero-glint {
+  position: absolute;
+  width: var(--g-size, 34px);
+  height: var(--g-size, 34px);
+  margin: calc(var(--g-size, 34px) / -2) 0 0 calc(var(--g-size, 34px) / -2);
+  pointer-events: none;
+  color: rgb(255 248 232);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transform: scale(0) rotate(0deg);
+  animation: hero-glint var(--g-period, 4.6s) var(--hero-ease) var(--g-delay, 3s) infinite both;
+  filter: drop-shadow(0 0 6px rgb(255 226 170 / 0.9));
+}
+@keyframes hero-glint {
+  0% {
+    opacity: 0;
+    transform: scale(0.1) rotate(-20deg);
+  }
+  8% {
+    opacity: 1;
+    transform: scale(1) rotate(10deg);
+  }
+  20% {
+    opacity: 0;
+    transform: scale(0.2) rotate(40deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.2) rotate(40deg);
+  }
+}
+
+/* Static film grain: editorial texture, rendered once, never animated */
+.hero-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.09;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Gold dust canvas */
+.hero-dust {
+  position: absolute;
+  inset: -4%;
+  z-index: 5;
+  pointer-events: none;
+  will-change: transform;
+}
+.hero-dust canvas {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  /* the dust gathers after the headline has landed */
+  transition: opacity 1800ms ease-out 1300ms;
+}
+.hero-dust canvas[data-ready] {
+  opacity: 1;
+}
+
+/* ---------- Type ---------- */
+
+.hero-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--hero-size);
+  /* Bodoni's long descenders need air: the "y" of Every must clear the "ll" of tells */
+  line-height: 1;
+  letter-spacing: -0.032em;
+  text-wrap: nowrap;
+}
+.hero-line {
+  display: block;
+}
+@media (min-width: 48rem) {
+  /* Editorial stagger: the second line steps in, like a magazine cover line */
+  .hero {
+    --hero-indent: calc(var(--hero-size) * 0.72);
+  }
+}
+.hero-line--indent,
+.hero-indent {
+  padding-left: var(--hero-indent);
+}
+
+/* Each word rises through its own mask, one after another */
+.hero-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  /* room for ascenders, descenders and Bodoni's ball terminals inside the mask */
+  padding: 0.06em 0.04em 0.16em;
+  margin: -0.06em -0.04em -0.16em;
+}
+.hero-word > span {
+  display: inline-block;
+  transform-origin: 0 100%;
+  animation: hero-word 1250ms var(--hero-ease) both;
+  animation-delay: calc(1050ms + var(--w, 0) * 95ms);
+}
+@keyframes hero-word {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 115%, 0) rotate(5deg);
+  }
+  35% {
+    opacity: 1;
+  }
+}
+
+.hero-rule {
+  display: inline-block;
+  width: 2.75rem;
+  height: 1px;
+  background: currentColor;
+  transform-origin: 0 50%;
+  animation: hero-draw 800ms var(--hero-ease) 900ms both;
+}
+@keyframes hero-draw {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/* The eyebrow's tracking closes in as it appears */
+.hero-eyebrow-text {
+  animation: hero-tracking 1300ms var(--hero-ease) 950ms both;
+}
+@keyframes hero-tracking {
+  from {
+    opacity: 0;
+    letter-spacing: 0.6em;
+  }
+}
+
+.hero-copy {
+  animation: hero-rise 1000ms var(--hero-ease) 1750ms both;
+}
+.hero-cta-primary {
+  animation: hero-rise 1000ms var(--hero-ease) 1950ms both;
+}
+.hero-cta-secondary {
+  animation: hero-rise 1000ms var(--hero-ease) 2080ms both;
+}
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+  }
+}
+
+/* Caption band along the foot of the hero */
+.hero-band-rule {
+  transform-origin: 0 50%;
+  animation: hero-draw 1300ms var(--hero-curtain) 2100ms both;
+}
+.hero-band {
+  animation: hero-fade 900ms var(--hero-ease) 2400ms both;
+}
+@keyframes hero-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Scroll cue: a line that draws through, on a slow loop */
+.hero-cue {
+  animation: hero-cue 2600ms var(--hero-curtain) 3s infinite both;
+}
+@keyframes hero-cue {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  45% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  55% {
+    transform: scaleX(1);
+    transform-origin: right;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right;
+  }
+}
+
+/* ---------- Reduced motion ----------
+   No mask, zoom, travel, light, glints or dust. Content simply fades in. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-media {
+    animation: hero-fade-up-black 600ms ease-out both;
+  }
+  .hero-zoom,
+  .hero-breathe,
+  .hero-rule,
+  .hero-band-rule,
+  .hero-cue {
+    animation: none;
+  }
+  .hero-keylight,
+  .hero-sheen,
+  .hero-glint,
+  .hero-dust {
+    display: none;
+  }
+  .hero-word > span,
+  .hero-eyebrow-text,
+  .hero-copy,
+  .hero-cta-primary,
+  .hero-cta-secondary,
+  .hero-band {
+    animation: hero-fade 500ms ease both;
+  }
+  .hero-parallax {
+    will-change: auto;
+  }
+}
