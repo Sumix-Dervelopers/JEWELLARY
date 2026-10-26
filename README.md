@@ -151,6 +151,21 @@ scripts/               image pipeline
 tests/e2e/             Playwright specs
 ```
 
+## Deployment (Coolify)
+
+The repo ships a production `Dockerfile` that builds Next.js's standalone server and runs it as a
+non-root user on port 3000.
+
+1. In Coolify, create a new resource from this Git repository and choose the **Dockerfile** build pack.
+2. Set **Ports Exposes** to `3000` and attach your domain.
+3. Add the environment variables from `.env.example`. Tick **Build Variable** on
+   `NEXT_PUBLIC_SITE_URL`, because `NEXT_PUBLIC_*` values are baked in at build time; the two
+   webhook URLs are read at runtime and need no rebuild.
+4. Deploy. The image has a built-in health check on `/`.
+
+To try the image locally: `docker build --build-arg NEXT_PUBLIC_SITE_URL=http://localhost:3000 -t sumix-jewels .`
+then `docker run -p 3000:3000 sumix-jewels`.
+
 ## Notes for developers
 
 - This is Next.js 16 with **Cache Components**. Routes are prerendered; anything reading `searchParams` sits inside `<Suspense>`, and dynamic pages stream their params-dependent content so client navigations stay instant. Read `node_modules/next/dist/docs` before changing caching (see `AGENTS.md`).

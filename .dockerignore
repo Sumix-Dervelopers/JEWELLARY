@@ -1,0 +1,22 @@
+.git
+.github
+.next
+node_modules
+npm-debug.log*
+
+# local env files; production values come from Coolify
+.env*
+!.env.example
+
+# not needed in the image
+design
+tests
+test-results
+playwright-report
+blob-report
+coverage
+*.tsbuildinfo
+Dockerfile
+.dockerignore
+README.md
+AGENTS.md
