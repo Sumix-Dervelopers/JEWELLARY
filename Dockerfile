@@ -24,7 +24,8 @@ ARG NEXT_PUBLIC_SITE_URL
 ENV NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL}
 ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN npm run build
+# Git does not keep empty folders, so make sure /app/public exists for the runtime stage.
+RUN mkdir -p public && npm run build
 
 # --- Runtime ------------------------------------------------------------------
 FROM node:${NODE_VERSION} AS runner
