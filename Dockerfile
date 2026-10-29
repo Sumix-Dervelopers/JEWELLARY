@@ -31,10 +31,12 @@ RUN mkdir -p public && npm run build
 FROM node:${NODE_VERSION} AS runner
 WORKDIR /app
 
+# HOSTNAME "::" listens on IPv4 and IPv6. With 0.0.0.0, health checks that hit "localhost"
+# (which Alpine can resolve to ::1) get "connection refused".
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
     PORT=3000 \
-    HOSTNAME=0.0.0.0
+    HOSTNAME=::
 
 RUN addgroup -S -g 1001 nodejs && adduser -S -u 1001 -G nodejs nextjs
 
