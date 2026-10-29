@@ -6,6 +6,17 @@
  * cannot receive mail). Values set to `null` are not shown on the site. Replace everything here with
  * verified details before using the site for a real business.
  */
+
+/**
+ * Docker passes an unset build arg through as "", and hosts often store a bare domain, so treat an
+ * empty value as unset and add a scheme when one is missing.
+ */
+function normaliseSiteUrl(raw: string | undefined): string | null {
+  const value = raw?.trim().replace(/\/+$/, "");
+  if (!value) return null;
+  return /^https?:\/\//i.test(value) ? value : `https://${value}`;
+}
+
 export const site = {
   name: "Ratna Jewellers",
   wordmark: "RATNA JEWELLERS",
@@ -20,7 +31,7 @@ export const site = {
   credit: { name: "Sumix Developers", href: null as string | null },
 
   /** Canonical origin, e.g. "https://ratnajewellers.com". Canonical URLs and the sitemap use it once set. */
-  url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? null,
+  url: normaliseSiteUrl(process.env.NEXT_PUBLIC_SITE_URL),
 
   currency: {
     code: "NPR",
