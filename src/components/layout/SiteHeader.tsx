@@ -94,7 +94,7 @@ export function SiteHeader() {
           </div>
 
           {/* Centre */}
-          <Link href="/" aria-label="Sumix Jewels, home" className="justify-self-center px-2 py-2">
+          <Link href="/" aria-label="Ratna Jewellers, home" className="justify-self-center px-2 py-2">
             <Wordmark />
           </Link>
 

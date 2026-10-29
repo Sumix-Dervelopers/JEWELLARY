@@ -7,13 +7,14 @@ import { Reveal } from "@/components/ui/Reveal";
 
 export const metadata: Metadata = {
   title: "Our Story",
-  description: "Sumix Jewels makes fine jewellery for the moments people carry with them: designed to be worn, chosen to be remembered.",
+  description:
+    "Ratna Jewellers is a fine-jewellery house in Thamel, Kathmandu, making jewellery for the moments people carry with them.",
   alternates: site.url ? { canonical: "/about" } : undefined,
 };
 
 /*
- * Brand-level storytelling only. Founding dates, workshop locations, techniques and sourcing
- * are intentionally not stated until the business confirms them.
+ * Portfolio-concept storytelling for a fictional Kathmandu store. Founding dates, techniques and
+ * sourcing are intentionally not stated.
  */
 export default function AboutPage() {
   return (
@@ -22,8 +23,8 @@ export default function AboutPage() {
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Our Story" }]} />
         <h1 className="display-xl mt-12 max-w-[14ch] md:mt-16">Jewellery that becomes part of your story.</h1>
         <p className="lede mt-8 max-w-[50ch] text-obsidian/80">
-          Some objects are bought. Others are kept. We make the second kind: fine jewellery chosen to mark a moment, and
-          worn long enough to become part of the person who wears it.
+          Some objects are bought. Others are kept. From our showroom in Thamel, Kathmandu, we make the second kind: fine
+          jewellery chosen to mark a moment, and worn long enough to become part of the person who wears it.
         </p>
       </section>
 

@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     const res = await fetch(webhook, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, source: "sumix-website" }),
+      body: JSON.stringify({ email, source: "ratna-website" }),
       signal: AbortSignal.timeout(8000),
     });
     if (!res.ok) throw new Error(`Provider responded ${res.status}`);

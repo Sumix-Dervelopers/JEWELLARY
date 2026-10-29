@@ -26,7 +26,7 @@ test("homepage renders the brand experience without errors", async ({ page }) =>
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Every piece\s*tells a story\./);
   await expect(page.getByRole("link", { name: "Explore the collection" }).first()).toBeVisible();
   await expect(page.getByRole("heading", { name: "Find the piece that is yours" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Letters from Sumix" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Letters from Ratna" })).toBeVisible();
   expect(errors).toEqual([]);
 });
 

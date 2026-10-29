@@ -1,18 +1,25 @@
 /**
  * Central brand configuration.
  *
- * Everything a business owner needs to confirm lives here. Values set to `null` are not shown on
- * the site; nothing in this file is invented on the brand's behalf. Replace them with verified
- * details before launch.
+ * Ratna Jewellers is a fictional Kathmandu jewellery store built as a portfolio concept. The contact
+ * details and policies below are sample values (the email uses the reserved `.example` domain and
+ * cannot receive mail). Values set to `null` are not shown on the site. Replace everything here with
+ * verified details before using the site for a real business.
  */
 export const site = {
-  name: "Sumix Jewels",
-  wordmark: "SUMIX JEWELS",
+  name: "Ratna Jewellers",
+  wordmark: "RATNA JEWELLERS",
   tagline: "Jewellery that becomes part of your story.",
   description:
-    "Sumix Jewels makes fine jewellery to be treasured: solitaires, pendants, pearls and bracelets designed for the moments that matter.",
+    "Ratna Jewellers is a fine-jewellery house in Thamel, Kathmandu: solitaires, pendants, pearls and bracelets designed for the moments that matter.",
 
-  /** Canonical origin, e.g. "https://sumixjewels.com". Canonical URLs and the sitemap use it once set. */
+  /** True while the site is shown as a portfolio piece; the footer then says so. */
+  isPortfolioConcept: true,
+
+  /** Studio credit in the footer. Set `href` to the studio's website to link it. */
+  credit: { name: "Sumix Developers", href: null as string | null },
+
+  /** Canonical origin, e.g. "https://ratnajewellers.com". Canonical URLs and the sitemap use it once set. */
   url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? null,
 
   currency: {
@@ -33,26 +40,31 @@ export const site = {
    */
   catalogueIsDemo: true,
 
+  /** Sample details for the portfolio concept, not a real shop. */
   contact: {
-    email: null as string | null,
+    email: "hello@ratnajewellers.example" as string | null,
     phone: null as string | null,
-    address: null as string | null,
-    hours: null as string | null,
+    address: "Thamel, Kathmandu 44600, Nepal" as string | null,
+    hours: "Sunday to Friday, 10:00 am to 6:00 pm (NPT)" as string | null,
   },
 
   /** Add verified profiles only, e.g. { label: "Instagram", href: "https://instagram.com/…" }. */
   social: [] as { label: string; href: string }[],
 
-  /** Policy summaries shown on the Client Care page. `null` shows "details to follow". */
+  /** Policy summaries shown on the Client Care page. `null` shows "details to follow". Sample copy. */
   policies: {
-    delivery: null as string | null,
-    returns: null as string | null,
-    giftPresentation: null as string | null,
+    delivery:
+      "Complimentary insured delivery within the Kathmandu Valley, usually within two working days. Pieces can also be collected from our Thamel showroom." as string | null,
+    returns:
+      "Unworn pieces in their original packaging can be returned or exchanged within 14 days. Engraved and made-to-order pieces are final sale." as string | null,
+    giftPresentation:
+      "Every piece arrives in a Ratna Jewellers box with a handwritten card on request. Tell us the message when you place your enquiry." as string | null,
   },
 
   /** Messages for the announcement bar, rotated in order. Keep them factual. */
   announcements: [
     { text: "Introducing the Signature edit", href: "/collections/signature" },
+    { text: "Visit our showroom in Thamel, Kathmandu", href: "/contact" },
     { text: "Save pieces to your wishlist, no account needed", href: "/wishlist" },
     { text: "Questions about sizing or stones? Send us an enquiry", href: "/contact" },
   ],

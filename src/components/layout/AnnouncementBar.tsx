@@ -24,7 +24,7 @@ export function AnnouncementBar() {
   function dismiss() {
     document.documentElement.dataset.announce = "off";
     try {
-      localStorage.setItem("sumix-announce-off", "1");
+      localStorage.setItem("ratna-announce-off", "1");
     } catch {}
   }
 

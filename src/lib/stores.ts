@@ -34,7 +34,7 @@ export const useCart = create<CartState>()(
       clear: () => set({ lines: [] }),
     }),
     {
-      name: "sumix-bag",
+      name: "ratna-bag",
       version: 1,
       storage: createJSONStorage(() => localStorage),
       skipHydration: true,
@@ -65,7 +65,7 @@ export const useWishlist = create<WishlistState>()(
       remove: (productId) => set({ ids: get().ids.filter((id) => id !== productId) }),
     }),
     {
-      name: "sumix-wishlist",
+      name: "ratna-wishlist",
       version: 1,
       storage: createJSONStorage(() => localStorage),
       skipHydration: true,

@@ -9,7 +9,7 @@ import { HairlineArrow } from "@/components/ui/primitives";
 
 export const metadata: Metadata = {
   title: "Journal",
-  description: "Stories and guides from Sumix Jewels: choosing a signature ring, layering necklaces, gifting and caring for fine jewellery.",
+  description: "Stories and guides from Ratna Jewellers: choosing a signature ring, layering necklaces, gifting and caring for fine jewellery.",
   alternates: site.url ? { canonical: "/journal" } : undefined,
 };
 

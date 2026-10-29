@@ -1,4 +1,6 @@
-# Sumix Jewels — storefront
+# Ratna Jewellers — Kathmandu storefront concept
+
+Designed and developed by **Sumix Developers** as a portfolio project.
 
 A luxury fine-jewellery storefront built with Next.js 16 (App Router, Cache Components), React 19,
 Tailwind CSS 4, Motion and Base UI.
@@ -60,21 +62,28 @@ already go through `src/lib/catalog.ts`. Then update or remove the slug registry
 
 ---
 
-## Content the business must confirm before launch
+## Portfolio contact details and launch checklist
 
-Everything lives in **`src/config/site.ts`**. Nothing there was invented on the brand's behalf:
+This project is configured as a fictional Kathmandu jewellery-store concept for portfolio use.
+Everything lives in **`src/config/site.ts`**. Its contact details are sample values, not a real shop:
 
-- **Contact details** (`email`, `phone`, `address`, `hours`) are `null` and hidden until set.
+- **Email:** `hello@ratnajewellers.example` uses the reserved `.example` domain and cannot receive mail.
+- **Location and hours:** Thamel, Kathmandu, Nepal; Sunday–Friday, 10:00 am–6:00 pm (NPT). These are illustrative.
+- **Phone** is left `null` (hidden) so the site never shows a number that might belong to someone.
+- **Policies** (`delivery`, `returns`, `giftPresentation`) on `/client-care` are sample copy.
+- **`credit`** shows "Designed and developed by Sumix Developers" in the footer. Set `credit.href` to link it to the studio's website.
+- **`isPortfolioConcept: true`** makes the footer say the site is a portfolio concept. Set it to `false` for a real launch.
+- Replace these placeholders with verified business details before presenting this as a real shop.
 - **Social links** are empty and hidden until set.
-- **Policies** (`delivery`, `returns`, `giftPresentation`) show "Details to follow" on `/client-care` until written.
 - **Currency** defaults to Nepalese rupees with lakh grouping (`Rs 4,85,000`). Change `currency` for INR, USD, etc.
 - **Ring sizes** default to US 5–9. Confirm the standard you use.
 - **`catalogueIsDemo: true`** shows a demonstration notice on every product page and in the footer, and **withholds Product structured data** from search engines. Set it to `false` only once names, prices, metals and stones are verified.
 
 The product data (`src/data/products.ts`) is illustrative. Material lines describe what each
 photograph shows; no metal purity, stone grade, origin, certification or manufacturing claim
-is made anywhere on the site. The brand story (`/about`) is written at brand level; add real
-history, workshop or sourcing details only when they are confirmed.
+is made anywhere on the site. The brand story (`/about`) is portfolio-concept copy; add real
+history, workshop or sourcing details only when they are confirmed. The footer labels the site
+as a portfolio concept, and the contact form and newsletter are not connected to an email service.
 
 ---
 
@@ -85,7 +94,7 @@ art direction: warm directional light, deep shadow, yellow gold, and stone, silk
 Masters are in `design/source-images/`; the crops used on the site are produced by
 `scripts/process-images.mjs`.
 
-- The images depict **illustrative pieces, not real Sumix Jewels products**. Replace them with real product photography before selling. Drop a new master into `design/source-images/` under the same name (or edit the crop table) and run `npm run images`.
+- The images depict **illustrative pieces, not real Ratna Jewellers products**. Replace them with real product photography before selling. Drop a new master into `design/source-images/` under the same name (or edit the crop table) and run `npm run images`.
 - Review Figma's AI terms for commercial use of generated images before launch.
 - The catalogue is deliberately small (8 pieces) because each product image is a crop of a photograph in which that piece actually appears. More imagery can be generated when Figma AI credits allow; the prompts follow the house direction described above.
 
@@ -163,13 +172,11 @@ non-root user on port 3000.
    webhook URLs are read at runtime and need no rebuild.
 4. Deploy. The image has a built-in health check on `/`.
 
-To try the image locally: `docker build --build-arg NEXT_PUBLIC_SITE_URL=http://localhost:3000 -t sumix-jewels .`
-then `docker run -p 3000:3000 sumix-jewels`.
+To try the image locally: `docker build --build-arg NEXT_PUBLIC_SITE_URL=http://localhost:3000 -t ratna-jewellers .`
+then `docker run -p 3000:3000 ratna-jewellers`.
 
 ## Notes for developers
 
 - This is Next.js 16 with **Cache Components**. Routes are prerendered; anything reading `searchParams` sits inside `<Suspense>`, and dynamic pages stream their params-dependent content so client navigations stay instant. Read `node_modules/next/dist/docs` before changing caching (see `AGENTS.md`).
 - Pages stay mounted (React `<Activity>`) after navigation. Transient UI such as drawers and the lightbox resets itself on hide.
 - The project currently lives in a OneDrive folder. OneDrive syncing `node_modules` and `.next` slows Turbopack and occasionally delays hot reload; moving the project outside OneDrive, or excluding those folders, avoids this.
-#   J E W E L L A R Y  
- 

@@ -5,7 +5,7 @@ import { EnquiryForm } from "@/components/forms/EnquiryForm";
 
 export const metadata: Metadata = {
   title: "Contact and enquiries",
-  description: "Ask Sumix Jewels about sizing, stones, a particular piece or a gift.",
+  description: "Ask Ratna Jewellers about sizing, stones, a particular piece or a gift.",
   alternates: site.url ? { canonical: "/contact" } : undefined,
 };
 

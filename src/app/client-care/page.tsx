@@ -5,7 +5,7 @@ import { ArrowLink } from "@/components/ui/primitives";
 
 export const metadata: Metadata = {
   title: "Client care",
-  description: "How ordering works at Sumix Jewels, with delivery, returns and jewellery care information.",
+  description: "How ordering works at Ratna Jewellers, with delivery, returns and jewellery care information.",
   alternates: site.url ? { canonical: "/client-care" } : undefined,
 };
 

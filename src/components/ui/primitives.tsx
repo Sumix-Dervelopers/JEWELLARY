@@ -15,7 +15,7 @@ export function Wordmark({ className }: { className?: string }) {
         className,
       )}
     >
-      SUMIX<span className="ml-[0.5em] text-[0.78em] tracking-[0.42em]">JEWELS</span>
+      RATNA<span className="ml-[0.5em] text-[0.78em] tracking-[0.42em]">JEWELLERS</span>
     </span>
   );
 }

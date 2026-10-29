@@ -64,7 +64,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         {/* Reveals stay visible without JavaScript; this flag is removed before first paint */}
         <Script id="init-flags" strategy="beforeInteractive">
-          {"document.documentElement.classList.remove('no-js');try{if(localStorage.getItem('sumix-announce-off')==='1')document.documentElement.dataset.announce='off'}catch(e){}"}
+          {"document.documentElement.classList.remove('no-js');try{if(localStorage.getItem('ratna-announce-off')==='1')document.documentElement.dataset.announce='off'}catch(e){}"}
         </Script>
       </head>
       <body className="flex min-h-svh flex-col">

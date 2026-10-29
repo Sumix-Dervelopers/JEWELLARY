@@ -35,12 +35,12 @@ export function SiteFooter() {
 
   return (
     <footer className="on-dark bg-obsidian pb-[env(safe-area-inset-bottom)] text-ivory">
-      {/* Letters from Sumix — the newsletter lives here so it appears once on every page */}
+      {/* Letters from Ratna — the newsletter lives here so it appears once on every page */}
       <section id="letters" aria-labelledby="letters-title" className="border-b border-line-dark">
         <div className="wrap grid gap-10 py-20 md:py-28 lg:grid-cols-12 lg:items-end lg:gap-10">
           <div className="lg:col-span-6">
             <h2 id="letters-title" className="display-lg">
-              Letters from Sumix
+              Letters from Ratna
             </h2>
             <p className="mt-5 max-w-[42ch] text-ivory/75">
               Collection launches, stories from the journal and occasional updates from the house.
@@ -55,7 +55,7 @@ export function SiteFooter() {
       <div className="wrap pt-16 pb-10 md:pt-20">
         <div className="grid gap-14 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-4">
-            <Link href="/" aria-label="Sumix Jewels, home" className="inline-block">
+            <Link href="/" aria-label="Ratna Jewellers, home" className="inline-block">
               <Wordmark className="text-xl xl:text-2xl" />
             </Link>
             <p className="mt-6 max-w-[26ch] font-display text-xl leading-snug text-ivory/90">{site.tagline}</p>
@@ -114,9 +114,23 @@ export function SiteFooter() {
           <p>
             © <CopyrightYear /> {site.name}. Prices shown in {site.currency.label}.
           </p>
-          {site.catalogueIsDemo && (
-            <p>Products, prices and imagery are shown for demonstration and are not yet available to order.</p>
+          {site.isPortfolioConcept ? (
+            <p>A portfolio concept for a Kathmandu jewellery store. Products, prices and contact details are samples.</p>
+          ) : (
+            site.catalogueIsDemo && (
+              <p>Products, prices and imagery are shown for demonstration and are not yet available to order.</p>
+            )
           )}
+          <p>
+            Designed and developed by{" "}
+            {site.credit.href ? (
+              <a href={site.credit.href} className="link-line text-ivory/85" rel="noopener noreferrer" target="_blank">
+                {site.credit.name}
+              </a>
+            ) : (
+              <span className="text-ivory/85">{site.credit.name}</span>
+            )}
+          </p>
         </div>
       </div>
     </footer>

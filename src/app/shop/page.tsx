@@ -9,7 +9,7 @@ import { StaticGrid } from "@/components/shop/StaticGrid";
 
 export const metadata: Metadata = {
   title: "All jewellery",
-  description: "Rings, necklaces, earrings and bracelets from Sumix Jewels. Filter by category, occasion and price.",
+  description: "Rings, necklaces, earrings and bracelets from Ratna Jewellers. Filter by category, occasion and price.",
   alternates: site.url ? { canonical: "/shop" } : undefined,
 };
 
